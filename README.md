@@ -32,7 +32,10 @@ put this in your vimrc file
 `vmap <silent> <c-s-K> <Esc>: GetVWD<CR>`   
 
 pics:
+---
 ![build_in_help](https://raw.githubusercontent.com/tlhc/vim-yd-trans/master/doc/trans.vim%20%20workwith%20build-in%20help.png)
+---
 ![1](https://raw.githubusercontent.com/tlhc/vim-yd-trans/master/doc/trans1.png)
+---
 ![2](https://raw.githubusercontent.com/tlhc/vim-yd-trans/master/doc/trans2.png)
 
