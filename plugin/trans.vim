@@ -26,19 +26,28 @@ def tras(word):
         print word + ":"
 
     pos = d.find(s.decode("utf-8").encode("utf-8"))
-    ret = d[pos:pos + 5000]
+    ret = d[pos : pos + 5000]
 
     pos = ret.find("<ul>")
     pos1 = ret.find("</ul>")
 
-    ret = ret[pos + 4:pos1]
-
+    ret = ret[pos + 4 : pos1]
+    if "<span" in ret:
+        idn = "class=\"pos\">"
+        pos = ret.find(idn)
+        pos = pos + len(idn)
+        pos1 = ret.find("</span", pos)
+        print "    " + ret[pos : pos1]
+        idn2 = "class=\"def\">"
+        pos = ret.find(idn2, pos1)
+        pos = pos + len(idn2)
+        pos1 = ret.find("</span", pos)
+        print "    " + ret[pos : pos1]
+    else:
+        ret = ret.replace('<li>', '')
+        ret = ret.replace('</li>', '')
+        print ret
     #print ret
-
-    ret = ret.replace('<li>', '')
-    ret = ret.replace('</li>', '')
-
-    print ret
     return
 
 word=vim.eval("a:word")
