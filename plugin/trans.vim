@@ -2,53 +2,58 @@
 function! <SID>TransL(word)
 python << EOF
 
-#coding=utf-8
-import vim, urllib2, sys
-def tras(word):
-    s="trans-container"
-    err="error-wrapper"
+# coding=utf-8
 
-    request="http://dict.youdao.com/search?q=" + word + "&keyfrom=dict.index"
+import vim, urllib2, sys
+
+
+def tras(word):
+
+    s = "trans-container"
+    err = "error-wrapper"
+
+    request = "http://dict.youdao.com/search?q=" \
+            + word + "&keyfrom=dict.index"
 
     try:
         url = urllib2.urlopen(request, None, 2)
         d = url.read()
-    except:
-        print "req time out"
-        return
+        epos = d.find(err.decode("utf-8").encode("utf-8"))
 
-    epos = d.find(err.decode("utf-8").encode("utf-8"))
+        if epos != -1:
+            print "can't find "
+            return
+        else:
+            print word + ":"
 
-    if epos != -1:
-        print "can't find "
-        return
-    else:
-        print word + ":"
+        pos = d.find(s.decode("utf-8").encode("utf-8"))
+        ret = d[pos : pos + 5000]
 
-    pos = d.find(s.decode("utf-8").encode("utf-8"))
-    ret = d[pos : pos + 5000]
+        pos = ret.find("<ul>")
+        pos1 = ret.find("</ul>")
 
-    pos = ret.find("<ul>")
-    pos1 = ret.find("</ul>")
+        ret = ret[pos + 4 : pos1]
+        if "<span" in ret:
+            idn = "class=\"pos\">"
+            pos = ret.find(idn)
+            pos = pos + len(idn)
+            pos1 = ret.find("</span", pos)
+            print "    " + ret[pos : pos1]
+            idn2 = "class=\"def\">"
+            pos = ret.find(idn2, pos1)
+            pos = pos + len(idn2)
+            pos1 = ret.find("</span", pos)
+            print "    " + ret[pos : pos1]
+        else:
+            ret = ret.replace('<li>', '')
+            ret = ret.replace('</li>', '')
+            print ret
 
-    ret = ret[pos + 4 : pos1]
-    if "<span" in ret:
-        idn = "class=\"pos\">"
-        pos = ret.find(idn)
-        pos = pos + len(idn)
-        pos1 = ret.find("</span", pos)
-        print "    " + ret[pos : pos1]
-        idn2 = "class=\"def\">"
-        pos = ret.find(idn2, pos1)
-        pos = pos + len(idn2)
-        pos1 = ret.find("</span", pos)
-        print "    " + ret[pos : pos1]
-    else:
-        ret = ret.replace('<li>', '')
-        ret = ret.replace('</li>', '')
-        print ret
-    #print ret
+    except URLError as e:
+        print e.reason
+
     return
+
 
 word=vim.eval("a:word")
 tras(word)
