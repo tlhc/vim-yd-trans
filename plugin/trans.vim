@@ -27,7 +27,7 @@ def tras(word):
             print word + ":"
 
         pos = d.find(s.decode("utf-8").encode("utf-8"))
-        ret = d[pos : pos + 5000]
+        ret = d[pos : pos + 1000]
 
         pos = ret.find("<ul>")
         pos1 = ret.find("</ul>")
