@@ -5,8 +5,6 @@ python << EOF
 # coding=utf-8
 
 import vim, urllib2, sys
-
-
 def tras(word):
 
     s = "trans-container"
@@ -30,8 +28,10 @@ def tras(word):
         ret = d[pos : pos + 1000]
 
         pos = ret.find("<ul>")
-        pos1 = ret.find("</ul>")
-
+        pos1 = ret.find("</ul>", pos)
+        if pos1 < pos:
+            print 'not find.'
+            return
         ret = ret[pos + 4 : pos1]
         if "<span" in ret:
             idn = "class=\"pos\">"
